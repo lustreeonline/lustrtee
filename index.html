@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lustree | Product Showcase</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+    body { background: #f8f9fa; color: #222; transition: background 0.3s; }
+    a { text-decoration: none; color: inherit; cursor: pointer; }
+    ul { list-style: none; }
+
+    /* Navbar */
+    header { background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 10; transition: background 0.3s; }
+    .navbar { max-width: 1200px; margin: auto; display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; }
+    .logo { font-size: 1.5rem; font-weight: bold; color: #4CAF50; transition: color 0.3s; }
+    .nav-links { display: flex; gap: 20px; }
+    .nav-links li a { font-weight: 500; transition: 0.3s; }
+    .nav-links li a:hover { color: #4CAF50; }
+
+    /* Sections */
+    section { display: none; padding: 40px 20px; max-width: 1200px; margin: auto; opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    section.active { display: block; opacity: 1; transform: translateY(0); }
+
+    /* Hero */
+    .hero { height: 70vh; background: url('https://images.unsplash.com/photo-1523275335684-37898b6baf30') center/cover no-repeat; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+    .hero-text { text-align: center; background: rgba(0,0,0,0.6); padding: 30px; border-radius: 10px; color: #fff; opacity: 0; transform: translateY(20px); animation: fadeInUp 1s forwards; }
+    .hero-text h1 { font-size: 3rem; margin-bottom: 15px; transition: transform 0.3s; }
+    .hero-text button { background: #4CAF50; border: none; padding: 12px 25px; color: #fff; font-size: 1rem; border-radius: 5px; cursor: pointer; transition: 0.3s, transform 0.3s; }
+    .hero-text button:hover { background: #45a049; transform: translateY(-3px); }
+
+    @keyframes fadeInUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Products */
+    .section h2 { text-align: center; font-size: 2rem; margin-bottom: 30px; }
+    .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+    .product { background: #fff; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); overflow: hidden; transition: 0.3s, transform 0.3s, box-shadow 0.3s; cursor: pointer; }
+    .product:hover { transform: scale(1.05); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+    .product img { width: 100%; height: 250px; object-fit: cover; transition: transform 0.3s; }
+    .product:hover img { transform: scale(1.05); }
+    .product-info { padding: 15px; }
+    .product-info h3 { font-size: 1.2rem; margin-bottom: 10px; }
+    .product-info p { color: #555; margin-bottom: 10px; }
+    .product-info button { background: #4CAF50; border: none; padding: 8px 15px; color: #fff; border-radius: 5px; cursor: pointer; transition: 0.3s, transform 0.3s; }
+    .product-info button:hover { background: #45a049; transform: translateY(-2px); }
+
+    /* Filters */
+    .filters { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
+    .filters input, .filters select { padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 1rem; transition: 0.3s; }
+    .filters input:focus, .filters select:focus { border-color: #4CAF50; outline: none; }
+
+    /* Notice Modal */
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s; }
+    .modal.show { display: flex; opacity: 1; }
+    .modal-content { background: #fff; padding: 30px; border-radius: 10px; max-width: 400px; text-align: center; transform: scale(0.8); transition: transform 0.3s; }
+    .modal.show .modal-content { transform: scale(1); }
+    .modal-content h2 { margin-bottom: 15px; }
+    .modal-content p { margin-bottom: 20px; }
+    .modal-content .links { display: flex; flex-direction: column; gap: 10px; }
+    .modal-content a { display: block; background: #4CAF50; color: #fff; padding: 10px; border-radius: 5px; transition: 0.3s, transform 0.3s; }
+    .modal-content a:hover { background: #45a049; transform: translateY(-2px); }
+    .modal-content button { margin-top: 15px; background: #444; color: #fff; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; transition: 0.3s, transform 0.3s; }
+    .modal-content button:hover { background: #222; transform: translateY(-2px); }
+
+    /* Footer */
+    footer { background: #222; color: #ccc; text-align: center; padding: 20px; margin-top: 50px; transition: background 0.3s; }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header>
+    <div class="navbar">
+      <div class="logo">Lustree</div>
+      <ul class="nav-links">
+        <li><a onclick="navigate('home')">Home</a></li>
+        <li><a onclick="navigate('shop')">Shop</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Home Page -->
+  <section id="home" class="active">
+    <div class="hero">
+      <div class="hero-text">
+        <h1>Shine with Lustree</h1>
+        <p>Discover elegant products crafted just for you.</p>
+        <button onclick="navigate('shop')">Explore Products</button>
+      </div>
+    </div>
+    <div class="section">
+      <h2>Featured Products</h2>
+      <div class="products" id="featured-products"></div>
+    </div>
+    <div class="section">
+      <h2>New Arrivals</h2>
+      <div class="products" id="new-arrivals"></div>
+    </div>
+    <div class="section">
+      <h2>Best Sellers</h2>
+      <div class="products" id="best-sellers"></div>
+    </div>
+  </section>
+
+  <!-- Shop Page -->
+  <section id="shop">
+    <h2>All Products</h2>
+    <div class="filters">
+      <input type="text" id="searchInput" placeholder="Search products..." onkeyup="applyFilters()">
+      <select id="categoryFilter" onchange="applyFilters()">
+        <option value="all">All Categories</option>
+        <option value="jewelry">Jewelry</option>
+        <option value="watches">Watches</option>
+        <option value="bags">Bags</option>
+        <option value="rings">Rings</option>
+      </select>
+      <select id="sortFilter" onchange="applyFilters()">
+        <option value="default">Sort By</option>
+        <option value="low-high">Price: Low → High</option>
+        <option value="high-low">Price: High → Low</option>
+      </select>
+    </div>
+    <div class="products" id="shop-products"></div>
+  </section>
+
+  <!-- Modal -->
+  <div class="modal" id="noticeModal">
+    <div class="modal-content">
+      <h2>Order Notice</h2>
+      <p>You can purchase Lustree products on:</p>
+      <div class="links">
+        <a href="#" target="_blank">🛍️ Meesho</a>
+        <a href="#" target="_blank">🛒 Amazon</a>
+        <a href="#" target="_blank">📦 Flipkart</a>
+      </div>
+      <button onclick="closeModal()">Close</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Lustree. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const products = [
+      { id: 1, name: "Elegant Necklace", price: 49.99, category: "jewelry", img: "https://images.unsplash.com/photo-1522336572468-97b06e8ef143", bestSeller: true },
+      { id: 2, name: "Classic Watch", price: 89.99, category: "watches", img: "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c", bestSeller: true },
+      { id: 3, name: "Luxury Handbag", price: 129.99, category: "bags", img: "https://images.unsplash.com/photo-1611078489935-0cb0f54b2e7b" },
+      { id: 4, name: "Diamond Ring", price: 199.99, category: "rings", img: "https://images.unsplash.com/photo-1605296867304-46d5465a13f1", bestSeller: true },
+      { id: 5, name: "Pearl Earrings", price: 59.99, category: "jewelry", img: "https://images.unsplash.com/photo-1589902818167-1e714c8b4e7d" },
+      { id: 6, name: "Leather Handbag", price: 149.99, category: "bags", img: "https://images.unsplash.com/photo-1584917865442-de89df76afd3" }
+    ];
+
+    let filteredProducts = [...products];
+
+    function navigate(page) {
+      document.querySelectorAll("section").forEach(sec => sec.classList.remove("active"));
+      document.getElementById(page).classList.add("active");
+      if (page === "shop") renderProducts("shop-products", filteredProducts);
+      if (page === "home") {
+        renderProducts("featured-products", products.slice(0, 3));
+        renderProducts("new-arrivals", products.slice(-3));
+        renderProducts("best-sellers", products.filter(p => p.bestSeller));
+      }
+    }
+
+    function renderProducts(containerId, items) {
+      const container = document.getElementById(containerId);
+      if (items.length === 0) { container.innerHTML = "<p>No products found.</p>"; return; }
+      container.innerHTML = items.map(p => `
+        <div class="product">
+          <img src="${p.img}" alt="${p.name}">
+          <div class="product-info">
+            <h3>${p.name}</h3>
+            <p>$${p.price.toFixed(2)}</p>
+            <button onclick="showNotice()">Order</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function applyFilters() {
+      const query = document.getElementById("searchInput").value.toLowerCase();
+      const category = document.getElementById("categoryFilter").value;
+      const sort = document.getElementById("sortFilter").value;
+
+      filteredProducts = products.filter(p => {
+        const matchesSearch = p.name.toLowerCase().includes(query);
+        const matchesCategory = category === "all" || p.category === category;
+        return matchesSearch && matchesCategory;
+      });
+
+      if (sort === "low-high") filteredProducts.sort((a,b)=>a.price-b.price);
+      else if (sort === "high-low") filteredProducts.sort((a,b)=>b.price-a.price);
+
+      renderProducts("shop-products", filteredProducts);
+    }
+
+    function showNotice() {
+      const modal = document.getElementById("noticeModal");
+      modal.classList.add("show");
+    }
+
+    function closeModal() {
+      const modal = document.getElementById("noticeModal");
+      modal.classList.remove("show");
+    }
+
+    // Initial render
+    renderProducts("featured-products", products.slice(0, 3));
+    renderProducts("new-arrivals", products.slice(-3));
+    renderProducts("best-sellers", products.filter(p => p.bestSeller));
+  </script>
+</body>
+</html>
